@@ -1,0 +1,19 @@
+{
+	"name": "trigger2",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/hold-csv/blobs/",
+			"blobPathEndsWith": "sales.csv",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/938d70c8-c87b-4094-82ed-6761972a34a9/resourceGroups/Fs/providers/Microsoft.Storage/storageAccounts/fsstorage0",
+			"events": [
+				"Microsoft.Storage.BlobCreated",
+				"Microsoft.Storage.BlobDeleted"
+			]
+		}
+	}
+}

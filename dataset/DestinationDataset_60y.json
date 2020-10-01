@@ -1,0 +1,15 @@
+{
+	"name": "DestinationDataset_60y",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "CosmosDb1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "CosmosDbSqlApiCollection",
+		"typeProperties": {
+			"collectionName": "CSales"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

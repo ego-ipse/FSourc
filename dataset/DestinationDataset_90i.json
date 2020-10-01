@@ -1,0 +1,15 @@
+{
+	"name": "DestinationDataset_90i",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "CosmosDb1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "CosmosDbSqlApiCollection",
+		"typeProperties": {
+			"collectionName": "C1"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

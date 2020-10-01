@@ -1,0 +1,51 @@
+{
+	"name": "dataflow2",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DestinationDataset_90i",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DestinationDataset_60y",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "CosmosOut",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "Join1"
+				},
+				{
+					"name": "Select1"
+				},
+				{
+					"name": "Select2"
+				},
+				{
+					"name": "Aggregate1"
+				},
+				{
+					"name": "DerivedColumn1"
+				}
+			],
+			"script": "source(output(\n\t\tp_id as integer,\n\t\tprice as integer,\n\t\tproduct as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tinferDriftedColumnTypes: true,\n\tformat: 'document',\n\tsystemColumns: false) ~> source1\nsource(output(\n\t\tc_id as integer,\n\t\tp_id as integer,\n\t\tproduct as string,\n\t\tqty as integer,\n\t\tsale_id as integer,\n\t\tstore as string\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false,\n\tformat: 'document',\n\tsystemColumns: false) ~> source2\nsource1, Select1 join(source1@p_id == Select1@p_id,\n\tjoinType:'right',\n\tbroadcast: 'auto')~> Join1\nsource2 select(mapColumn(\n\t\tp_id,\n\t\tproduct,\n\t\tqty\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select1\nJoin1 select(mapColumn(\n\t\tp_id = {source1@p_id},\n\t\tprice,\n\t\tproduct = {source1@product},\n\t\tp_id = {Select1@p_id},\n\t\tproduct = {Select1@product},\n\t\tqty\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Select2\nSelect2 aggregate(groupBy(p_id,\n\t\tprice,\n\t\tproduct),\n\tqty = sum(qty)) ~> Aggregate1\nAggregate1 derive(total_sale = price*qty) ~> DerivedColumn1\nDerivedColumn1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:true,\n\tupdateable:false,\n\tupsertable:false,\n\tformat: 'document',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> sink1"
+		}
+	}
+}

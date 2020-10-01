@@ -1,0 +1,15 @@
+{
+	"name": "CosmosOut",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "CosmosDb2",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "CosmosDbSqlApiCollection",
+		"typeProperties": {
+			"collectionName": "fin"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
